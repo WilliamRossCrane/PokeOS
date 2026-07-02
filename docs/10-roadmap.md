@@ -1,6 +1,6 @@
 # PokéOS Roadmap
 
-> **Version:** 0.1.0
+> **Version:** 0.2.0
 > **Status:** Draft
 > **Last Updated:** 1 July 2026
 
@@ -13,27 +13,6 @@ This document defines the planned development roadmap for PokéOS.
 The roadmap breaks the project into clear phases so that development remains organised, achievable and aligned with the overall product vision.
 
 PokéOS is a large-scale project, so the goal is to build it in stages rather than attempting to complete everything at once.
-
----
-
-# Roadmap Philosophy
-
-PokéOS should be built using a phased approach.
-
-Each phase should:
-
-- Deliver a clear outcome.
-- Build on the previous phase.
-- Avoid unnecessary scope creep.
-- Be tracked through GitHub Issues and GitHub Projects.
-- Produce working, testable progress.
-
-The project should prioritise:
-
-- Planning before coding
-- Quality before speed
-- Core functionality before advanced features
-- A polished MVP before future expansion
 
 ---
 
@@ -343,64 +322,7 @@ This phase is complete when users can view current and upcoming Pokémon GO even
 
 ---
 
-# Phase 8 — Quest System & Achievements
-
-## Goal
-
-Make PokéOS feel more engaging and personal.
-
-## Main Features
-
-- Daily quests
-- Weekly quests
-- XP system
-- Trainer levels
-- Achievements
-- Badges
-- Streaks
-- Recent progress tracking
-
-## GitHub Epic
-
-```text
-EPIC: Quest System
-```
-
-## Completion Criteria
-
-This phase is complete when users can complete goals, earn XP and unlock achievements.
-
----
-
-# Phase 9 — Community Features
-
-## Goal
-
-Allow users to share their Pokémon journey with others.
-
-## Main Features
-
-- Public profiles
-- Shared teams
-- Shared collections
-- Friends
-- Activity feed
-- Community showcase
-- Privacy settings
-
-## GitHub Epic
-
-```text
-EPIC: Community
-```
-
-## Completion Criteria
-
-This phase is complete when users can share selected profile, team and collection information publicly.
-
----
-
-# Phase 10 — Mobile App
+# Phase 8 — Mobile App
 
 ## Goal
 
@@ -497,67 +419,6 @@ Releases
 
 ---
 
-# GitHub Issue Structure
-
-PokéOS should use the following issue structure:
-
-```text
-Epic
-└── Feature
-    └── Task
-```
-
-During the planning phase, most sub-issues will be tasks.
-
-During development, larger work items should be broken into features and smaller implementation tasks.
-
----
-
-# Labels
-
-Recommended GitHub labels:
-
-```text
-epic
-feature
-task
-bug
-documentation
-research
-ui-ux
-frontend
-backend
-database
-api
-auth
-testing
-priority-high
-priority-medium
-priority-low
-```
-
----
-
-# Milestones
-
-Recommended milestones:
-
-```text
-Planning
-V1 Foundation
-V1 Core Shell
-V1 Pokédex
-V1 Team Builder
-V1 TCG Vault
-MVP Public Preview
-V2 Pokémon GO Hub
-V3 Quest System
-V4 Community
-V5 Mobile App
-```
-
----
-
 # Version 1 Release Criteria
 
 Version 1 should only be considered complete when:
@@ -648,20 +509,6 @@ PokéOS should be built according to these principles:
 
 ---
 
-# Immediate Next Steps
-
-After completing the planning documents:
-
-1. Review all documentation.
-2. Confirm MVP scope.
-3. Finalise tech stack.
-4. Create development issues for Phase 1.
-5. Set up the Next.js project.
-6. Set up deployment.
-7. Begin building the core PokéOS shell.
-
----
-
 # Roadmap Summary
 
 ```text
@@ -680,10 +527,6 @@ TCG Collection
 MVP Polish
    ↓
 Pokémon GO
-   ↓
-Quests
-   ↓
-Community
    ↓
 Mobile App
 ```

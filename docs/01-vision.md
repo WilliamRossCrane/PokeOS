@@ -1,6 +1,6 @@
 # PokéOS Vision
 
-> **Version:** 0.1.0  
+> **Version:** 0.2.0  
 > **Status:** Draft  
 > **Last Updated:** 1 July 2026
 
@@ -15,14 +15,6 @@ Today, Pokémon players often rely on multiple websites and applications to mana
 PokéOS brings these experiences together into a single modern application with one account, one dashboard and one ecosystem.
 
 Rather than replacing existing Pokémon resources, PokéOS is designed to connect and organise them into a unified experience that helps trainers manage every part of their Pokémon journey.
-
----
-
-# Vision Statement
-
-To build the world's best Pokémon companion platform by providing a beautiful, intuitive and feature-rich experience that supports every type of Pokémon fan.
-
-PokéOS should feel less like a website and more like a personal operating system built specifically for Pokémon enthusiasts.
 
 ---
 
@@ -112,12 +104,6 @@ Features should be easy to understand and intuitive to navigate.
 
 ---
 
-## Mobile First
-
-Every feature should work seamlessly across desktop and mobile devices.
-
----
-
 ## Beautiful User Experience
 
 PokéOS should provide a polished, modern interface inspired by premium mobile applications while maintaining its own unique identity.
@@ -128,21 +114,6 @@ The interface should prioritise:
 - Consistency
 - Accessibility
 - Performance
-
----
-
-# Target Audience
-
-PokéOS is designed for:
-
-- Pokémon fans
-- Trading Card Game collectors
-- Competitive battlers
-- Pokémon GO players
-- Shiny hunters
-- Living Dex completionists
-- Casual collectors
-- Content creators
 
 ---
 
@@ -174,18 +145,6 @@ PokéOS will be considered successful when users can:
 - Build and analyse teams.
 - Stay informed about Pokémon events and releases.
 - Enjoy a polished and enjoyable user experience.
-
----
-
-# Project Philosophy
-
-PokéOS is more than a collection of tools.
-
-It is designed to become the home screen for Pokémon fans.
-
-Every feature should support one simple goal:
-
-> **One place for everything Pokémon.**
 
 ---
 

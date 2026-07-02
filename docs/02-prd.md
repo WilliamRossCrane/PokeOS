@@ -1,6 +1,6 @@
 # PokéOS Product Requirements Document (PRD)
 
-> **Version:** 0.1.0  
+> **Version:** 0.2.0  
 > **Status:** Draft  
 > **Last Updated:** 1 July 2026
 
@@ -20,7 +20,7 @@ PokéOS will be available as both a responsive web application and a future mobi
 
 ## Primary Goal
 
-Create the ultimate all-in-one Pokémon companion platform.
+Create a all-in-one Pokémon companion platform.
 
 ## Secondary Goals
 
@@ -167,16 +167,6 @@ These are outside the MVP but planned for future releases.
 
 ---
 
-## Quest System
-
-- Daily quests
-- Weekly quests
-- XP
-- Trainer Levels
-- Rewards
-
----
-
 ## Shiny Tracker
 
 - Active hunts
@@ -209,16 +199,6 @@ These are outside the MVP but planned for future releases.
 - Card prices
 - Trending cards
 - Price alerts
-
----
-
-## Community
-
-- Public profiles
-- Shared teams
-- Shared collections
-- Friends
-- Activity feed
 
 ---
 

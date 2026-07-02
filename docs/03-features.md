@@ -1,6 +1,6 @@
 # PokéOS Feature Inventory
 
-> **Version:** 0.1.0  
+> **Version:** 0.2.0  
 > **Status:** Living Document  
 > **Last Updated:** 1 July 2026
 
@@ -293,23 +293,6 @@ Examples:
 
 ---
 
-## Weekly Quests
-
-- Finish a collection
-- Complete Pokédex entries
-- Build new teams
-
----
-
-## Rewards
-
-- XP
-- Levels
-- Achievements
-- Badges
-
----
-
 # Market Watch
 
 ## Trading Card Prices
@@ -374,30 +357,6 @@ Examples:
 
 ---
 
-# Achievements
-
-Examples:
-
-- First Team Created
-- First Shiny Logged
-- Complete Kanto Dex
-- Complete First Card Set
-- 100 Pokémon Logged
-- 365 Day Streak
-
----
-
-# Community
-
-## Profiles
-
-- Public profile
-- Friends
-- Following
-- Activity feed
-
----
-
 ## Sharing
 
 - Share teams
@@ -411,9 +370,7 @@ Examples:
 
 ## Personalisation
 
-- Themes
 - Dark mode
-- Wallpapers
 - Dashboard layout
 - Widget customisation
 
