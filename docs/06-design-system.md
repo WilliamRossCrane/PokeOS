@@ -1,6 +1,6 @@
 # PokéOS Design System
 
-> **Version:** 0.1.0  
+> **Version:** 0.2.0  
 > **Status:** Draft  
 > **Last Updated:** 1 July 2026
 
@@ -40,12 +40,7 @@ PokéOS draws inspiration from:
 - Pokémon TCG Pocket
 - Apple iOS
 - macOS
-- Material Design
-- Arc Browser
-- Linear
 - Notion
-
-The goal is **inspiration**, not imitation.
 
 PokéOS should establish its own visual identity.
 
@@ -75,14 +70,6 @@ Users should not need to search for essential information.
 
 ---
 
-## Progressive Disclosure
-
-Show only what the user needs.
-
-Advanced information should be revealed naturally as users explore.
-
----
-
 ## Responsive
 
 Every interface should work seamlessly across:
@@ -93,74 +80,157 @@ Every interface should work seamlessly across:
 
 ---
 
-# Layout System
-
-## Desktop
-
-Primary layout consists of:
-
-- Sidebar Navigation
-- Top Navigation
-- Main Content
-- Widget Panels
-
-Example
-
-```text
-┌──────────────────────────────────────────────┐
-│ Top Navigation                               │
-├────────────┬─────────────────────────────────┤
-│ Sidebar    │ Main Content                    │
-│            │                                 │
-│            │ Widgets / Cards / Tables        │
-│            │                                 │
-└────────────┴─────────────────────────────────┘
-```
-
----
-
-## Mobile
-
-Primary layout consists of:
-
-- Header
-- Scrollable Content
-- Bottom Navigation
-
-```text
-┌─────────────────┐
-│ Header          │
-├─────────────────┤
-│                 │
-│ Content         │
-│                 │
-│                 │
-├─────────────────┤
-│ Bottom Nav      │
-└─────────────────┘
-```
-
----
-
-# Grid System
-
-Desktop
-
-- 12 Column Grid
-
-Tablet
-
-- 8 Column Grid
-
-Mobile
-
-- 4 Column Grid
-
----
-
 # Components
 
-## Cards
+Components are reusable building blocks used throughout PokéOS.
+
+The component library should be designed with a React/Next.js structure in mind. Each component should be reusable, easy to understand and consistent across desktop and mobile layouts.
+
+Components should support:
+
+- Reusability
+- Accessibility
+- Clear naming
+- Responsive behaviour
+- Loading states
+- Empty states
+- Error states
+- Consistent spacing
+- Consistent styling
+
+---
+
+## Component Library
+
+The Phase 1 component library should focus only on components required for the MVP.
+
+Phase 1 includes:
+
+- Dashboard
+- Pokédex
+- Team Builder
+- TCG Tracker / TCG Vault
+- Profile
+- Settings
+
+Future components for Pokémon GO, community, market, quests and advanced features should not be prioritised until later phases.
+
+---
+
+## Core Layout Components
+
+### AppShell
+
+The main layout wrapper for the authenticated PokéOS application.
+
+Used for:
+
+- Sidebar layout
+- Top navigation
+- Main content area
+- Responsive mobile layout
+
+Expected areas:
+
+- Sidebar
+- Topbar
+- Page content
+- Mobile bottom navigation
+
+---
+
+### Sidebar
+
+Desktop navigation component.
+
+Should include:
+
+- Logo
+- Primary navigation links
+- Active state
+- User profile card
+- Settings access
+
+Phase 1 sidebar items:
+
+- Dashboard
+- Pokédex
+- Team Builder
+- TCG Tracker
+- Profile
+- Settings
+
+---
+
+### Topbar
+
+Top navigation area for desktop layouts.
+
+Should include:
+
+- Search bar
+- Notification icon
+- User profile menu
+- Optional keyboard shortcut indicator
+
+---
+
+### MobileHeader
+
+Top header for mobile layouts.
+
+Should include:
+
+- Logo
+- Notification icon
+- Profile avatar or menu button
+
+---
+
+### BottomNavigation
+
+Primary mobile navigation component.
+
+Phase 1 mobile navigation items:
+
+- Home
+- Dex
+- Teams
+- TCG
+- Profile
+
+Settings should be accessible through Profile or a menu.
+
+---
+
+## Core UI Components
+
+### Button
+
+Used for primary user actions.
+
+Types:
+
+- Primary
+- Secondary
+- Tertiary
+- Destructive
+- Icon Button
+
+States:
+
+- Default
+- Hover
+- Active
+- Focus
+- Loading
+- Disabled
+
+Buttons should always use clear labels.
+
+---
+
+### Card
 
 Cards are the primary content container.
 
@@ -171,41 +241,428 @@ Cards should contain:
 - Optional actions
 - Consistent spacing
 
-Examples
+Examples:
 
 - Dashboard Widget
 - Pokémon Card
 - Collection Summary
-- Event Card
+- Team Snapshot
+- Recent Activity
+- TCG Set Preview
 
 ---
 
-## Buttons
+### Input
 
-Types
+Used for user-entered data.
 
-- Primary
-- Secondary
-- Tertiary
-- Destructive
+Examples:
 
-Buttons should include:
+- Search input
+- Profile name input
+- Team name input
+- Filter fields
 
-- Icon (optional)
-- Clear label
-- Hover state
-- Loading state
-- Disabled state
+States:
+
+- Default
+- Focus
+- Error
+- Disabled
 
 ---
 
-## Navigation
+### SearchBar
 
-Desktop
+Global search component.
+
+Users should be able to quickly search:
+
+- Pokémon
+- Cards
+- Teams
+- Collections
+
+For Phase 1, search should focus on:
+
+- Pokédex search
+- TCG card search
+- Team search
+
+---
+
+### Badge
+
+Used to show small pieces of status information.
+
+Examples:
+
+- Balanced
+- New
+- Complete
+- Owned
+- Favourite
+- Draft
+
+Badges should be short and easy to scan.
+
+---
+
+### ProgressBar
+
+Used to show user progress.
+
+Examples:
+
+- XP progress
+- Collection progress
+- Set completion
+- Team power
+
+Progress bars should include a label or supporting text so the meaning is clear.
+
+---
+
+### Avatar
+
+Used for trainer profile images.
+
+Avatar should support:
+
+- Default placeholder
+- Uploaded image
+- Selected trainer icon
+- Online/active indicator where needed
+
+---
+
+### Icon
+
+Icons should be used consistently across the platform.
+
+Icons should be:
+
+- Simple
+- Rounded
+- Consistent
+- Recognisable
+
+Avoid mixing multiple icon styles.
+
+---
+
+## Dashboard Components
+
+### WelcomeCard
+
+Large dashboard card used to greet the user.
+
+Should include:
+
+- User name
+- Short welcome message
+- Light visual background
+- Optional featured character or companion-style image
+
+---
+
+### AppLauncher
+
+Displays the main PokéOS tools.
+
+Phase 1 launcher items:
+
+- Pokédex
+- Team Builder
+- TCG Tracker
+- Collection / TCG Vault
+
+Optional:
+
+- More features coming soon
+
+The app launcher should not show future-phase tools during Phase 1.
+
+---
+
+### AppLauncherItem
+
+Reusable item used inside the AppLauncher.
+
+Should include:
+
+- Icon
+- App name
+- Short description
+- Active/hover state
+
+---
+
+### TeamSnapshot
+
+Shows a quick summary of the user's current team.
+
+Should include:
+
+- Six team slots
+- Team status
+- Team power
+- Link to manage team
+
+---
+
+### CollectionProgress
+
+Shows card collection progress.
+
+Should include:
+
+- Set name
+- Cards owned
+- Total cards
+- Percentage complete
+- Progress bar
+- Link to view collection
+
+---
+
+### RecentActivity
+
+Shows recent user actions.
+
+Examples:
+
+- Added card to collection
+- Built a new team
+- Updated profile
+- Completed Pokédex entry
+
+Each activity item should include:
+
+- Icon
+- Description
+- Timestamp
+
+---
+
+### LatestTCGSet
+
+Shows the latest or featured TCG set.
+
+Should include:
+
+- Set image or original card-style artwork
+- Set name
+- Release date
+- Total cards
+- Secret rares
+- Link to view set
+
+---
+
+## Pokédex Components
+
+### PokemonSearch
+
+Search and filter component for the Pokédex.
+
+Should support:
+
+- Name search
+- Type filter
+- Generation filter
+
+---
+
+### PokemonCard
+
+Small preview card for a Pokémon.
+
+Should include:
+
+- Image
+- Name
+- Number
+- Type badges
+
+---
+
+### PokemonDetailPanel
+
+Detailed Pokémon information view.
+
+Should include:
+
+- Stats
+- Type
+- Abilities
+- Evolution information
+- Moves summary
+- Add to team action
+
+---
+
+## Team Builder Components
+
+### TeamCard
+
+Preview card for a saved team.
+
+Should include:
+
+- Team name
+- Team Pokémon preview
+- Team status
+- Last updated date
+
+---
+
+### TeamSlot
+
+Represents one Pokémon slot in a team.
+
+Should support:
+
+- Empty state
+- Filled state
+- Remove action
+- Edit action
+
+---
+
+### TeamAnalysisPanel
+
+Shows basic team analysis.
+
+Phase 1 analysis should include:
+
+- Type coverage
+- Weakness summary
+- Team balance status
+
+Keep Phase 1 analysis simple.
+
+---
+
+## TCG Tracker / Vault Components
+
+### CardSearch
+
+Search component for TCG cards.
+
+Should support:
+
+- Card name
+- Set
+- Rarity
+
+---
+
+### TCGCardPreview
+
+Small card preview component.
+
+Should include:
+
+- Card image
+- Name
+- Set
+- Rarity
+- Owned status
+
+---
+
+### CollectionSummary
+
+Shows overall collection progress.
+
+Should include:
+
+- Cards owned
+- Total cards
+- Sets tracked
+- Completion percentage
+
+---
+
+### SetProgressCard
+
+Shows progress for a specific TCG set.
+
+Should include:
+
+- Set name
+- Cards owned
+- Total cards
+- Progress bar
+- View set action
+
+---
+
+## Profile Components
+
+### TrainerProfileCard
+
+Shows user profile information.
+
+Should include:
+
+- Avatar
+- Trainer name
+- Level
+- XP progress
+- Favourite Pokémon
+- Favourite region
+
+---
+
+### ProfileStatCard
+
+Small stat card used on the profile page.
+
+Examples:
+
+- Teams created
+- Cards collected
+- Favourite Pokémon
+- Sets completed
+
+---
+
+## Settings Components
+
+### SettingsSection
+
+Groups related settings together.
+
+Examples:
+
+- Account
+- Appearance
+- Notifications
+- Privacy
+
+---
+
+### ToggleSetting
+
+Used for simple on/off settings.
+
+Examples:
+
+- Dark mode
+- Email notifications
+- Profile visibility
+
+---
+
+# Navigation
+
+Desktop:
 
 - Left Sidebar
 
-Mobile
+Mobile:
 
 - Bottom Navigation
 
@@ -215,9 +672,11 @@ Navigation should always display:
 - Label
 - Active state
 
+Navigation should be predictable and consistent across the application.
+
 ---
 
-## Search
+# Search
 
 Search should be globally available throughout PokéOS.
 
@@ -227,7 +686,6 @@ Users should be able to quickly search:
 - Cards
 - Teams
 - Collections
-- Events
 
 ---
 
@@ -242,33 +700,41 @@ Icons should be:
 
 Avoid mixing multiple icon styles.
 
+Icons should support the same visual style across:
+
+- Sidebar
+- App launcher
+- Bottom navigation
+- Cards
+- Empty states
+
 ---
 
 # Colour Philosophy
 
 Colours should communicate meaning rather than decoration.
 
-Examples
+Examples:
 
-Success
+## Success
 
 - Completed
 - Owned
 - Active
 
-Warning
+## Warning
 
 - Expiring
 - Missing
 - Attention Required
 
-Danger
+## Danger
 
 - Delete
 - Remove
 - Critical Error
 
-Information
+## Information
 
 - Tips
 - News
@@ -278,11 +744,11 @@ Information
 
 # Typography
 
-Headings
+## Headings
 
 Large, bold and easy to scan.
 
-Body
+## Body
 
 Highly readable.
 
@@ -294,19 +760,19 @@ Avoid decorative fonts.
 
 Use consistent spacing throughout the application.
 
-Small
+## Small
 
 - 8px
 
-Medium
+## Medium
 
 - 16px
 
-Large
+## Large
 
 - 24px
 
-Extra Large
+## Extra Large
 
 - 32px
 
@@ -316,15 +782,15 @@ Extra Large
 
 Rounded corners should be used consistently.
 
-Cards
+## Cards
 
 - Medium Radius
 
-Buttons
+## Buttons
 
 - Medium Radius
 
-Inputs
+## Inputs
 
 - Medium Radius
 
@@ -346,7 +812,7 @@ Animations should be:
 - Smooth
 - Purposeful
 
-Examples
+Examples:
 
 - Hover effects
 - Card expansion
@@ -369,31 +835,29 @@ The design system should support:
 
 ---
 
-# Dashboard Philosophy
+# Phase 1 Component Priority
 
-The dashboard should answer three questions immediately:
+The first components to design and build should be:
 
-- What should I do today?
-- How is my collection progressing?
-- What's happening in the Pokémon world?
+1. AppShell
+2. Sidebar
+3. Topbar
+4. MobileHeader
+5. BottomNavigation
+6. Button
+7. Card
+8. SearchBar
+9. AppLauncher
+10. AppLauncherItem
+11. WelcomeCard
+12. TeamSnapshot
+13. CollectionProgress
+14. RecentActivity
+15. LatestTCGSet
+16. TrainerProfileCard
+17. SettingsSection
 
-Everything else should be one click away.
-
----
-
-# Future Expansion
-
-The design system should be flexible enough to support future applications without major redesigns.
-
-Future applications may include:
-
-- Community
-- Marketplace
-- AI Assistant
-- Friends
-- Trading
-
-All future features should inherit this design system.
+These components are enough to support the Phase 1 dashboard and core navigation.
 
 ---
 
