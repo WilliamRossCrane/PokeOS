@@ -1,536 +1,557 @@
 # PokéOS Database Design
 
-> **Version:** 0.1.0  
+> **Version:** 0.2.0  
 > **Status:** Draft  
-> **Last Updated:** 1 July 2026
+> **Last Updated:** 4 July 2026
 
 ---
 
 # Purpose
 
-This document defines the planned database architecture for PokéOS.
+This document defines the Phase 1 database design for PokéOS.
 
-Its purpose is to identify the core entities, relationships and data requirements before development begins. The design focuses on scalability, maintainability and flexibility, allowing new features to be added without major structural changes.
+The goal is to keep the database simple, clear and realistic for the first version of the app.
 
----
+PokéOS should start with the core data needed for:
 
-# Design Goals
+- User profiles
+- Settings
+- Pokémon teams
+- Pokémon reference data
+- TCG card tracking
+- Activity history
 
-The database should be:
-
-- Scalable
-- Secure
-- Easy to maintain
-- Easy to query
-- Highly modular
-- Built around user-owned data
+Future features should be added later only when the app needs them.
 
 ---
 
-# Technology
+# Database Stack
 
-| Component | Technology      |
-| --------- | --------------- |
-| Database  | PostgreSQL      |
-| ORM       | Prisma          |
-| Hosting   | Neon PostgreSQL |
+| Area     | Tool             |
+| -------- | ---------------- |
+| Database | PostgreSQL       |
+| ORM      | Prisma           |
+| Hosting  | Neon or Supabase |
 
 ---
 
-# High-Level Architecture
+# Database Principles
+
+## Keep Phase 1 Small
+
+Only build tables required for the first usable version.
+
+Avoid creating tables for future features before they are needed.
+
+---
+
+## User Data Belongs To The User
+
+All personal data should connect back to a user account.
+
+Examples:
+
+- Profile
+- Settings
+- Teams
+- Collection
+- Activity
+
+---
+
+## Separate Reference Data From User Data
+
+Reference data is shared information.
+
+User data is personal information.
+
+Example:
+
+- `TcgCard` = card information
+- `UserTcgCard` = whether a user owns that card
+
+This keeps the database cleaner and avoids duplicated data.
+
+---
+
+## Cache External Data Carefully
+
+Pokémon and TCG data will come from external APIs.
+
+PokéOS may cache important reference data locally to improve speed and reduce API calls.
+
+---
+
+# Phase 1 Entity Map
 
 ```text
 User
 │
-├── Trainer Profile
-├── User Settings
-├── Teams
-├── Card Collection
-├── Living Dex
-├── Shiny Hunts
-├── Quest Progress
-├── Achievement Progress
-└── Activity Log
+├── TrainerProfile
+├── UserSettings
+├── PokemonTeam
+│   └── PokemonTeamMember
+├── UserTcgCard
+└── ActivityLog
+
+Pokemon
+└── PokemonEvolution
+
+TcgSet
+└── TcgCard
 ```
 
 ---
 
-# Core Entities
+# Phase 1 Tables
+
+---
 
 ## User
 
-Represents an authenticated PokéOS account.
+Represents a PokéOS account.
+
+Authentication will be handled by Clerk, but PokéOS should still store local user data linked to the Clerk user ID.
 
 ### Fields
 
-- id
-- email
-- username
-- createdAt
-- updatedAt
+- `id`
+- `clerkUserId`
+- `email`
+- `username`
+- `createdAt`
+- `updatedAt`
 
 ### Relationships
 
-- One Trainer Profile
-- One User Settings
-- Many Teams
-- Many Collection Entries
-- Many Activities
+- One `TrainerProfile`
+- One `UserSettings`
+- Many `PokemonTeams`
+- Many `UserTcgCards`
+- Many `ActivityLogs`
 
 ---
 
-## Trainer Profile
+## TrainerProfile
 
-Stores personalised trainer information.
+Stores the user's trainer profile.
 
 ### Fields
 
-- id
-- userId
-- trainerName
-- avatarUrl
-- favouritePokemon
-- favouriteRegion
-- favouriteGeneration
-- favouriteType
-- trainerLevel
-- xp
+- `id`
+- `userId`
+- `trainerName`
+- `avatarUrl`
+- `favouritePokemonId`
+- `favouriteRegion`
+- `favouriteType`
+- `trainerLevel`
+- `xp`
+- `createdAt`
+- `updatedAt`
+
+### Notes
+
+`trainerLevel` and `xp` can start simple.
+
+They do not need a full quest or achievement system in Phase 1.
 
 ---
 
-## User Settings
+## UserSettings
 
 Stores user preferences.
 
 ### Fields
 
-- id
-- userId
-- theme
-- dashboardLayout
-- notificationSettings
-- privacySettings
+- `id`
+- `userId`
+- `theme`
+- `dashboardLayout`
+- `profileVisibility`
+- `createdAt`
+- `updatedAt`
+
+### Example Values
+
+Theme:
+
+- `light`
+- `dark`
+- `system`
+
+Profile visibility:
+
+- `private`
+- `public`
 
 ---
 
-# Pokédex
-
-## Pokémon
-
-Stores Pokémon reference data.
-
-### Fields
-
-- id
-- pokedexNumber
-- name
-- generation
-- primaryType
-- secondaryType
-- height
-- weight
-- baseStats
-- imageUrl
-
-Reference data should be synchronised from external APIs where possible.
+# Pokémon Data
 
 ---
 
-## Pokémon Ability
+## Pokemon
 
-Stores Pokémon abilities.
+Stores cached Pokémon reference data.
 
 ### Fields
 
-- id
-- name
-- description
+- `id`
+- `externalId`
+- `pokedexNumber`
+- `name`
+- `generation`
+- `region`
+- `primaryType`
+- `secondaryType`
+- `height`
+- `weight`
+- `baseHp`
+- `baseAttack`
+- `baseDefense`
+- `baseSpecialAttack`
+- `baseSpecialDefense`
+- `baseSpeed`
+- `imageUrl`
+- `createdAt`
+- `updatedAt`
+
+### Notes
+
+Data should come from PokéAPI.
+
+Use `externalId` to store the API identifier from PokéAPI.
+
+Keep stats as separate fields instead of one large `baseStats` field so they are easier to query and display.
 
 ---
 
-## Pokémon Move
+## PokemonEvolution
 
-Stores move information.
-
-### Fields
-
-- id
-- name
-- type
-- category
-- power
-- accuracy
-- pp
-
----
-
-## Evolution
-
-Stores evolution relationships.
+Stores basic evolution relationships.
 
 ### Fields
 
-- id
-- fromPokemon
-- toPokemon
-- method
-- level
-- item
+- `id`
+- `fromPokemonId`
+- `toPokemonId`
+- `method`
+- `level`
+- `item`
+- `createdAt`
+- `updatedAt`
+
+### Notes
+
+This table is useful for the Pokédex detail page.
+
+Keep it simple for Phase 1.
 
 ---
 
 # Team Builder
 
-## Team
+---
 
-Stores a saved Pokémon team.
+## PokemonTeam
+
+Stores a saved team created by a user.
 
 ### Fields
 
-- id
-- userId
-- name
-- description
-- format
-- favourite
-- createdAt
+- `id`
+- `userId`
+- `name`
+- `description`
+- `format`
+- `isFavourite`
+- `createdAt`
+- `updatedAt`
+
+### Example Formats
+
+- `casual`
+- `competitive`
+- `story`
+- `custom`
 
 ---
 
-## Team Member
+## PokemonTeamMember
 
-Stores individual Pokémon within a team.
+Stores each Pokémon inside a team.
 
 ### Fields
 
-- id
-- teamId
-- pokemonId
-- nickname
-- level
-- nature
-- ability
-- heldItem
-- teraType
-- moveOne
-- moveTwo
-- moveThree
-- moveFour
+- `id`
+- `teamId`
+- `pokemonId`
+- `nickname`
+- `level`
+- `ability`
+- `nature`
+- `heldItem`
+- `teraType`
+- `moveOne`
+- `moveTwo`
+- `moveThree`
+- `moveFour`
+- `position`
+- `createdAt`
+- `updatedAt`
+
+### Notes
+
+Each team should have a maximum of six members.
+
+`position` controls the display order.
+
+Moves can be stored as text in Phase 1 to keep the schema simple.
+
+They can be normalised into a separate move table later if needed.
 
 ---
 
-# Trading Card Game
+# TCG Collection
 
-## Card Set
+---
 
-Stores Pokémon TCG expansion information.
+## TcgSet
+
+Stores Pokémon TCG set information.
 
 ### Fields
 
-- id
-- code
-- name
-- series
-- releaseDate
-- totalCards
+- `id`
+- `externalId`
+- `code`
+- `name`
+- `series`
+- `releaseDate`
+- `totalCards`
+- `logoUrl`
+- `symbolUrl`
+- `createdAt`
+- `updatedAt`
+
+### Notes
+
+Data should come from Pokémon TCG API.
+
+Use `externalId` to store the API set identifier.
 
 ---
 
-## Card
+## TcgCard
 
 Stores Pokémon TCG card information.
 
 ### Fields
 
-- id
-- setId
-- cardNumber
-- name
-- rarity
-- artist
-- imageUrl
-- marketPrice
+- `id`
+- `externalId`
+- `setId`
+- `cardNumber`
+- `name`
+- `rarity`
+- `artist`
+- `imageSmallUrl`
+- `imageLargeUrl`
+- `marketPrice`
+- `createdAt`
+- `updatedAt`
+
+### Notes
+
+Data should come from Pokémon TCG API.
+
+Market price can be nullable because not every card may have reliable price data.
 
 ---
 
-## User Card
+## UserTcgCard
 
-Represents a card owned by a user.
-
-### Fields
-
-- id
-- userId
-- cardId
-- quantity
-- condition
-- favourite
-- wishlist
-- trade
-- purchasePrice
-- notes
-
----
-
-# Living Dex
-
-## Living Dex Entry
-
-Tracks Pokémon owned by a user.
+Represents a card owned or tracked by a user.
 
 ### Fields
 
-- id
-- userId
-- pokemonId
-- owned
-- shiny
-- lucky
-- alpha
-- favourite
-- game
+- `id`
+- `userId`
+- `cardId`
+- `quantity`
+- `condition`
+- `isFavourite`
+- `isWishlist`
+- `isForTrade`
+- `purchasePrice`
+- `notes`
+- `createdAt`
+- `updatedAt`
 
----
+### Example Conditions
 
-# Shiny Tracker
+- `mint`
+- `near_mint`
+- `lightly_played`
+- `moderately_played`
+- `damaged`
+- `unknown`
 
-## Shiny Hunt
+### Notes
 
-Stores active shiny hunts.
+This table stores user ownership.
 
-### Fields
-
-- id
-- userId
-- pokemonId
-- game
-- method
-- encounters
-- status
-- startedAt
-- completedAt
-
----
-
-# Quest System
-
-## Quest
-
-Stores available quests.
-
-### Fields
-
-- id
-- title
-- description
-- frequency
-- xpReward
-
----
-
-## Quest Progress
-
-Stores user quest progress.
-
-### Fields
-
-- id
-- userId
-- questId
-- progress
-- status
-- completedAt
-
----
-
-# Achievements
-
-## Achievement
-
-Stores available achievements.
-
-### Fields
-
-- id
-- title
-- description
-- badge
-- xpReward
-
----
-
-## User Achievement
-
-Tracks unlocked achievements.
-
-### Fields
-
-- id
-- userId
-- achievementId
-- unlockedAt
-
----
-
-# Pokémon GO
-
-## GO Event
-
-Stores Pokémon GO events.
-
-### Fields
-
-- id
-- title
-- eventType
-- description
-- startDate
-- endDate
-- sourceUrl
-
----
-
-# Notifications
-
-## Notification
-
-Stores user notifications.
-
-### Fields
-
-- id
-- userId
-- title
-- message
-- type
-- read
-- createdAt
+The card details stay in `TcgCard`.
 
 ---
 
 # Activity Log
 
-Tracks recent user activity.
+---
+
+## ActivityLog
+
+Stores recent user activity for the dashboard.
 
 ### Fields
 
-- id
-- userId
-- activityType
-- description
-- metadata
-- createdAt
+- `id`
+- `userId`
+- `activityType`
+- `description`
+- `metadata`
+- `createdAt`
 
-Example activity types:
+### Example Activity Types
 
-- Team Created
-- Card Added
-- Collection Updated
-- Quest Completed
-- Achievement Unlocked
+- `team_created`
+- `team_updated`
+- `card_added`
+- `card_removed`
+- `profile_updated`
+- `collection_updated`
 
----
+### Notes
 
-# Entity Relationships
+`metadata` can store optional JSON for extra details.
 
-```text
-User
-├── Trainer Profile
-├── User Settings
-├── Team
-│   └── Team Member
-├── User Card
-├── Living Dex Entry
-├── Shiny Hunt
-├── Quest Progress
-├── Achievement Progress
-├── Notification
-└── Activity Log
+Example:
 
-Card Set
-└── Card
-
-Pokémon
-├── Ability
-├── Move
-└── Evolution
+```json
+{
+  "teamId": "123",
+  "teamName": "Kanto Classics"
+}
 ```
 
 ---
 
-# MVP Database
+# Phase 1 Relationships
 
-The first release of PokéOS will include the following entities:
+```text
+User
+├── TrainerProfile
+├── UserSettings
+├── PokemonTeam
+│   └── PokemonTeamMember
+├── UserTcgCard
+└── ActivityLog
 
-- User
-- Trainer Profile
-- User Settings
-- Pokémon
-- Team
-- Team Member
-- Card Set
-- Card
-- User Card
-- Activity Log
+Pokemon
+├── PokemonTeamMember
+└── PokemonEvolution
+
+TcgSet
+└── TcgCard
+    └── UserTcgCard
+```
 
 ---
 
-# Future Database Modules
+# Future Tables
 
-Future versions will introduce:
+These are intentionally excluded from Phase 1.
+
+Add them later when the related features are actually being built.
+
+## Future Modules
 
 - Living Dex
 - Shiny Tracker
 - Quest System
-- Achievement System
+- Achievements
 - Pokémon GO Events
 - Notifications
-- Marketplace
 - Friends
 - Community
+- Marketplace
 - Trading
 
 ---
 
-# Database Design Principles
+# Future Table Ideas
 
-## User First
+## LivingDexEntry
 
-All personalised data belongs to a User.
-
----
-
-## Reference Data
-
-Pokémon and Trading Card data should be stored separately from user-owned data.
-
-Example:
-
-- Card = Card information
-- User Card = User ownership
+Tracks Pokémon owned by a user across games.
 
 ---
 
-## Minimise Duplication
+## ShinyHunt
 
-Store shared information once wherever possible.
-
----
-
-## Modular Design
-
-Each PokéOS application should have clearly defined entities that integrate through shared user data.
+Tracks shiny hunts and encounter counts.
 
 ---
 
-## Future Proof
+## Quest
 
-The schema should support additional applications and integrations without requiring major redesigns.
+Stores daily or weekly quests.
+
+---
+
+## Achievement
+
+Stores unlockable achievements.
+
+---
+
+## Notification
+
+Stores in-app notifications.
+
+---
+
+## PokemonGoEvent
+
+Stores Pokémon GO events.
+
+---
+
+# Recommended Phase 1 Prisma Models
+
+Phase 1 should begin with these models only:
+
+- `User`
+- `TrainerProfile`
+- `UserSettings`
+- `Pokemon`
+- `PokemonEvolution`
+- `PokemonTeam`
+- `PokemonTeamMember`
+- `TcgSet`
+- `TcgCard`
+- `UserTcgCard`
+- `ActivityLog`
+
+This is enough to build the first usable version of PokéOS without over-engineering the database.
 
 ---
 
 # Notes
 
-This document defines the logical database architecture for PokéOS.
+This database design is intentionally simple.
 
-The implementation will later be translated into a Prisma schema during the development phase and may evolve as requirements change.
+The goal is not to design every future feature now.
+
+The goal is to create a clean Phase 1 schema that supports the core app and can grow safely over time.

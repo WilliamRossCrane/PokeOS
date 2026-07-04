@@ -1,24 +1,18 @@
 # PokéOS Architecture
 
-> **Version:** 0.1.0  
+> **Version:** 0.2.0  
 > **Status:** Draft  
-> **Last Updated:** 1 July 2026
+> **Last Updated:** 4 July 2026
 
 ---
 
 # Purpose
 
-This document defines the high-level software architecture for PokéOS.
+This document defines the Phase 1 software architecture for PokéOS.
 
-Its purpose is to provide a clear overview of how the application is structured, how components communicate, and the technologies that power the platform.
+The goal is to keep the architecture simple, maintainable and realistic for the first version of the app.
 
-The architecture should prioritise:
-
-- Scalability
-- Maintainability
-- Security
-- Performance
-- Developer Experience
+PokéOS should be built as a full-stack web application that can grow over time without becoming overcomplicated too early.
 
 ---
 
@@ -26,43 +20,73 @@ The architecture should prioritise:
 
 PokéOS should be:
 
-- Modular
+- Simple to build
 - Easy to maintain
-- Easy to extend
+- Modular
+- Type-safe
 - Fast
 - Secure
-- Mobile friendly
-- Cloud hosted
+- Mobile-friendly
+- Easy to deploy
 
-Every feature should integrate naturally into the overall platform without requiring major architectural changes.
+The first version should focus on building a strong foundation rather than supporting every future feature immediately.
 
 ---
 
 # High-Level Architecture
 
 ```text
-                    Users
-                      │
-        ┌─────────────┴─────────────┐
-        │                           │
- Desktop Web                 Mobile Web
-        │                           │
-        └─────────────┬─────────────┘
-                      │
-                 Next.js Application
-                      │
-     ┌────────────────┼────────────────┐
-     │                │                │
- Authentication     API Layer      UI Components
-     │                │                │
-     └────────────────┼────────────────┘
-                      │
-                 Business Logic
-                      │
-     ┌────────────────┼────────────────┐
-     │                │                │
- Database         External APIs     File Storage
+Users
+  │
+  ├── Desktop Web
+  └── Mobile Web
+          │
+          ▼
+Next.js Application
+          │
+          ├── App Router
+          ├── Server Components
+          ├── Client Components
+          ├── Server Actions
+          └── Route Handlers
+          │
+          ▼
+Application Logic
+          │
+          ├── Authentication
+          ├── Dashboard
+          ├── Pokédex
+          ├── Team Builder
+          ├── TCG Tracker
+          ├── Profile
+          └── Settings
+          │
+          ▼
+Data Layer
+          │
+          ├── PostgreSQL
+          ├── Prisma
+          ├── PokéAPI
+          └── Pokémon TCG API
 ```
+
+---
+
+# Architecture Style
+
+PokéOS will use a **modular monolith** architecture.
+
+This means the app will be built as one main application, but the code will be organised into clear feature areas.
+
+This is the best fit for Phase 1 because it is:
+
+- Easier to build
+- Easier to deploy
+- Easier to debug
+- Easier to manage as a solo developer
+- Still scalable enough for future growth
+
+PokéOS does not need microservices in Phase 1.
 
 ---
 
@@ -70,79 +94,153 @@ Every feature should integrate naturally into the overall platform without requi
 
 ## Presentation Layer
 
-Responsible for everything the user sees.
+The presentation layer is everything the user sees and interacts with.
 
 Includes:
+
+- Pages
+- Layouts
+- Cards
+- Buttons
+- Navigation
+- Forms
+- Dashboard widgets
+- Mobile views
+
+Technology:
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Custom components
+
+---
+
+## Feature Layer
+
+The feature layer contains the main PokéOS product areas.
+
+Phase 1 features:
 
 - Dashboard
 - Pokédex
 - Team Builder
-- TCG Vault
-- Pokémon GO Hub
+- TCG Tracker / TCG Vault
 - Profile
 - Settings
 
-Technology
+Each feature should have its own folder inside `src/features/`.
 
-- Next.js
-- React
-- Tailwind CSS
-- TypeScript
+Example:
+
+```text
+src/features/
+├── dashboard/
+├── pokedex/
+├── team-builder/
+├── tcg-vault/
+├── profile/
+└── settings/
+```
+
+Each feature can contain:
+
+```text
+components/
+actions.ts
+queries.ts
+types.ts
+utils.ts
+```
 
 ---
 
-## Business Logic Layer
+## Application Logic Layer
 
-Responsible for processing application logic.
+The application logic layer handles the rules of the app.
 
 Examples:
 
-- Team analysis
-- Collection progress
-- Quest completion
-- User permissions
-- Notifications
+- Creating a team
+- Updating a profile
+- Adding a card to a collection
+- Calculating collection progress
+- Building a team snapshot
+- Creating recent activity items
 
-This layer should remain independent from the user interface wherever possible.
+This logic should stay separate from UI components where possible.
 
 ---
 
 ## Data Layer
 
-Responsible for storing and retrieving application data.
+The data layer stores and retrieves app data.
 
-Examples:
-
-- User accounts
-- Teams
-- Collections
-- Statistics
-- Achievements
-
-Technology
+Technology:
 
 - PostgreSQL
-- Prisma ORM
+- Prisma
+
+The database will store:
+
+- Users
+- Trainer profiles
+- User settings
+- Teams
+- Team members
+- TCG collections
+- Activity logs
+- Cached Pokémon data
+- Cached TCG data
+
+Database design is documented in:
+
+```text
+docs/08-database.md
+```
 
 ---
 
-## External Services
+## External API Layer
 
-PokéOS will integrate with external services where appropriate.
+PokéOS will use external APIs for reference data.
 
-Potential integrations include:
+Phase 1 APIs:
 
 - PokéAPI
 - Pokémon TCG API
-- Authentication providers
-- Image hosting
-- News feeds
+
+PokéAPI will provide:
+
+- Pokémon names
+- Types
+- Stats
+- Abilities
+- Evolutions
+- Sprites/images where appropriate
+
+Pokémon TCG API will provide:
+
+- Card data
+- Set data
+- Card images
+- Rarity
+- Artist
+- Market-related data where available
+
+API research is documented in:
+
+```text
+docs/09-api-research.md
+```
 
 ---
 
-# Core Modules
+# Phase 1 Modules
 
-PokéOS is built using modular applications.
+PokéOS Phase 1 should include only the core modules.
 
 ```text
 PokéOS
@@ -151,173 +249,297 @@ PokéOS
 ├── Dashboard
 ├── Pokédex
 ├── Team Builder
-├── Collection Tracker
-├── TCG Vault
-├── Pokémon GO Hub
-├── Quest Board
-├── Notifications
+├── TCG Tracker
 ├── Profile
 └── Settings
 ```
 
-Each module should remain as independent as possible while sharing common services.
+Future modules should not be added until needed.
+
+Do not build Phase 1 architecture around:
+
+- Pokémon GO
+- Marketplace
+- Community
+- Quest system
+- Achievements
+- AI features
+- Native mobile app
+
+These can be added later.
 
 ---
 
-# Folder Structure
+# Recommended Folder Structure
 
-Planned project structure:
+PokéOS should use a `src/` based Next.js structure.
 
 ```text
-poke-os/
+POKEOS/
+├── src/
+│   ├── app/
+│   ├── components/
+│   ├── features/
+│   ├── lib/
+│   └── types/
 │
-├── app/
-├── components/
-├── features/
-│   ├── dashboard/
-│   ├── pokedex/
-│   ├── teams/
-│   ├── tcg/
-│   ├── go/
-│   ├── quests/
-│   └── profile/
-│
-├── lib/
 ├── prisma/
 ├── public/
+├── design/
 ├── docs/
-├── tests/
-└── README.md
+├── README.md
+├── package.json
+├── tsconfig.json
+├── next.config.ts
+├── tailwind.config.ts
+├── components.json
+└── .env.example
 ```
 
 ---
 
-# Shared Components
+# src/app/
 
-Reusable components should live in a shared library.
+The `src/app/` folder contains the Next.js App Router.
+
+Example:
+
+```text
+src/app/
+├── layout.tsx
+├── page.tsx
+├── dashboard/
+├── pokedex/
+├── teams/
+├── tcg/
+├── profile/
+├── settings/
+└── api/
+```
+
+Use this folder for:
+
+- Routes
+- Layouts
+- Pages
+- Loading states
+- Error states
+- API route handlers
+
+---
+
+# src/components/
+
+The `src/components/` folder contains reusable components.
+
+Example:
+
+```text
+src/components/
+├── ui/
+├── layout/
+└── shared/
+```
+
+## src/components/ui/
+
+Basic reusable UI components.
 
 Examples:
 
-- Buttons
-- Cards
-- Navigation
-- Forms
-- Modals
-- Tables
-- Search
-- Charts
+- Button
+- Card
+- Input
+- Badge
+- Dialog
+- Tabs
+- Progress
 
-Shared components improve consistency and reduce duplicated code.
+This is where shadcn/ui components should live.
+
+---
+
+## src/components/layout/
+
+Layout components.
+
+Examples:
+
+- App Shell
+- Sidebar
+- Topbar
+- Mobile Navigation
+- Page Container
+
+---
+
+## src/components/shared/
+
+Shared application components.
+
+Examples:
+
+- Search Bar
+- Avatar
+- Loading State
+- Empty State
+- Error State
+
+---
+
+# src/features/
+
+The `src/features/` folder contains feature-specific code.
+
+Example:
+
+```text
+src/features/
+├── dashboard/
+├── pokedex/
+├── team-builder/
+├── tcg-vault/
+├── profile/
+└── settings/
+```
+
+Feature-specific components should stay inside their feature folder unless they are reused across the app.
+
+---
+
+# src/lib/
+
+The `src/lib/` folder contains shared utilities and configuration.
+
+Example:
+
+```text
+src/lib/
+├── db.ts
+├── auth.ts
+├── utils.ts
+├── validations.ts
+└── constants.ts
+```
+
+Use this folder for shared code that does not belong to one specific feature.
 
 ---
 
 # Authentication
 
+Authentication will be handled by Clerk.
+
 Authentication should support:
 
-- Email and Password
-- Google Login
-- GitHub Login
-
-Authentication responsibilities include:
-
+- Sign up
 - Login
-- Registration
-- Session Management
-- User Permissions
+- Logout
+- Sessions
+- Google login
+- GitHub login
+- Protected routes
 
-Recommended provider:
+PokéOS should store local user data in the database using the Clerk user ID.
 
-- Clerk
+Passwords should never be stored directly in the PokéOS database.
 
 ---
 
 # Database
 
-The database should store:
+PokéOS will use PostgreSQL with Prisma.
 
-- Users
-- Teams
-- Collections
-- Cards
-- Pokémon
-- Quests
-- Achievements
-- Notifications
-- User Preferences
+Phase 1 database models:
 
-Database design is documented separately in:
+- User
+- TrainerProfile
+- UserSettings
+- Pokemon
+- PokemonEvolution
+- PokemonTeam
+- PokemonTeamMember
+- TcgSet
+- TcgCard
+- UserTcgCard
+- ActivityLog
 
-```text
-docs/08-database.md
-```
+The database should stay simple during Phase 1.
+
+Future tables should only be added when the feature is ready to build.
 
 ---
 
 # API Strategy
 
-PokéOS will use a combination of:
+PokéOS will use:
 
-- Internal APIs
-- External APIs
+- Server Actions for simple mutations
+- Route Handlers for API-style endpoints
+- External APIs for Pokémon and TCG reference data
 
-Internal APIs manage user-generated content.
+## Internal Data
 
-External APIs provide Pokémon-related information.
+Internal data includes:
 
-API integrations are documented separately in:
+- User profiles
+- Teams
+- Collections
+- Settings
+- Activity logs
 
-```text
-docs/09-api-research.md
-```
+This data belongs to PokéOS and should be stored in PostgreSQL.
+
+## External Data
+
+External data includes:
+
+- Pokémon reference data
+- TCG card data
+- TCG set data
+
+This data should be fetched from external APIs and cached locally where useful.
 
 ---
 
 # State Management
 
-Application state should be separated into:
+Phase 1 should keep state management simple.
 
-## Server State
+Start with:
 
-Examples:
+- React state
+- Server Components
+- Server Actions
+- URL search params where useful
 
-- Pokémon data
-- Card information
-- News
-- Events
+Do not add global state libraries unless needed.
 
-Managed using:
+## Add Later If Needed
 
-- TanStack Query
+TanStack Query may be added later for complex client-side server state.
 
----
+Zustand may be added later for complex UI state.
 
-## Client State
-
-Examples:
-
-- Theme
-- Navigation
-- Sidebar
-- Current Team Builder Session
-
-Managed using:
-
-- Zustand
+Do not add them on day one unless there is a clear reason.
 
 ---
 
 # File Storage
 
-File storage may include:
+Phase 1 should avoid complex file storage.
 
-- User avatars
-- Uploaded images
-- Cached assets
+For now:
 
-Recommended solution:
+- Use external image URLs from APIs where appropriate.
+- Use `public/` for local placeholder images and icons.
+- Avoid user uploads until they are required.
 
-- Vercel Blob Storage
+Future options:
+
+- Vercel Blob
+- UploadThing
+- Supabase Storage
 
 ---
 
@@ -325,104 +547,131 @@ Recommended solution:
 
 Security principles:
 
-- Authentication required for protected routes.
-- Passwords never stored in plain text.
-- Input validation on all forms.
-- API rate limiting where appropriate.
-- Secure environment variables.
-- HTTPS only.
+- Use Clerk for authentication.
+- Protect private routes.
+- Validate all form inputs.
+- Store secrets in environment variables.
+- Never commit API keys.
+- Use server-side code for sensitive operations.
+- Keep database access on the server.
+- Use HTTPS in production.
 
 ---
 
 # Performance
 
-The platform should prioritise:
+PokéOS should prioritise:
 
-- Fast loading
-- Lazy loading
-- Image optimisation
-- Code splitting
+- Fast page loads
+- Clean layouts
+- Optimised images
+- Cached external data
+- Minimal unnecessary client-side JavaScript
 - Efficient database queries
-- API caching
 
----
+Do not over-optimise too early.
 
-# Scalability
-
-The architecture should support future growth.
-
-Future modules should be able to plug into the platform without requiring major redesigns.
-
-Examples:
-
-- Marketplace
-- Community
-- AI Assistant
-- Trading Platform
+Build cleanly first, then improve performance where needed.
 
 ---
 
 # Testing Strategy
 
-Testing should include:
+Testing should be added gradually.
 
-- Unit Tests
-- Integration Tests
-- End-to-End Tests
+## Early Phase 1
 
-Future tooling:
+Manual testing is acceptable while building the first screens.
+
+## Later Phase 1
+
+Add unit tests for important logic.
+
+Examples:
+
+- Collection progress calculation
+- Team validation
+- Type coverage logic
+- Form validation schemas
+
+Recommended tool:
 
 - Vitest
+
+## Before Public Release
+
+Add end-to-end tests for important user flows.
+
+Examples:
+
+- User can log in
+- User can create a team
+- User can add a card to collection
+- User can update profile
+
+Recommended tool:
+
 - Playwright
 
 ---
 
 # Deployment
 
-Development
+## Development
 
-- Local Development Environment
+Run locally during development.
 
-Production
+## Production
 
-- Vercel
+Deploy to Vercel.
 
-Database
+## Database
 
-- Neon PostgreSQL
+Use a managed PostgreSQL provider such as:
 
-Version Control
+- Neon
+- Supabase
 
-- GitHub
+## Version Control
 
-CI/CD
+Use GitHub.
 
-- GitHub Actions
+## CI/CD
+
+Use Vercel’s GitHub integration first.
+
+GitHub Actions can be added later if needed.
 
 ---
 
 # Architecture Principles
 
-Every architectural decision should support these principles:
+PokéOS should follow these principles:
 
-- Build once, reuse everywhere.
-- Keep modules loosely coupled.
-- Prefer composition over duplication.
-- Optimise for maintainability.
-- Keep the user experience fast and responsive.
+- Keep the app simple first.
+- Build as a modular monolith.
+- Keep features separated.
+- Keep shared components reusable.
+- Keep database access on the server.
+- Validate data before saving it.
+- Avoid adding tools before they are needed.
+- Keep documentation updated as decisions change.
 
 ---
 
 # Future Architecture
 
-As PokéOS grows, the architecture may expand to include:
+Future versions may add:
 
-- Native mobile applications
-- Background workers
-- Real-time notifications
-- AI services
-- Microservices (if required)
+- Pokémon GO Hub
+- Quest system
+- Achievements
+- Notifications
+- Community features
+- Marketplace
+- Mobile app
+- Background jobs
+- Analytics
+- Error monitoring
 
-Until then, the application should remain a modular monolith.
-
-This approach provides the simplest architecture while allowing the platform to scale over time.
+These should be added only after the core platform is stable.
